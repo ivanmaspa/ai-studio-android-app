@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Gemini Studio AI</title>
+  <meta name="theme-color" content="#09090b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.08); }
+    }
+    .ambient-glow {
+      animation: pulseGlow 8s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between overflow-hidden">
+
+  <!-- Ambient Glow Effects -->
+  <div class="fixed top-0 -left-20 w-72 h-72 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none ambient-glow"></div>
+  <div class="fixed bottom-10 -right-20 w-80 h-80 bg-purple-600/15 rounded-full blur-3xl pointer-events-none ambient-glow" style="animation-delay: -4s;"></div>
+
+  <!-- Header -->
+  <header class="relative z-20 px-4 py-3.5 border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-xl flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+        <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-bold text-base tracking-tight text-white">AI Studio Mobile</h1>
+          <span class="px-1.5 py-0.5 text-[10px] font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full">3.8 Flash</span>
+        </div>
+        <p class="text-xs text-zinc-400">Google AI Studio &bull; Xiaomi 13 Pro</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="btnSettings" class="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-all active:scale-95">
+        <i data-lucide="settings" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Quick Feature Banners / Bento Chips -->
+  <div class="relative z-10 px-4 pt-3 flex gap-2 overflow-x-auto custom-scroll no-scrollbar py-1">
+    <button onclick="applyPreset('Р Р°Р·СЂР°Р±РѕС‚Р°Р№ РёРґРµСЋ РґР»СЏ РјРѕР±РёР»СЊРЅРѕРіРѕ СЃС‚Р°СЂС‚Р°РїР°')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800/80 text-xs font-medium text-zinc-300 hover:border-indigo-500/40 hover:text-white transition-all active:scale-95 flex items-center gap-1.5">
+      <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-400"></i> РРґРµСЏ СЃС‚Р°СЂС‚Р°РїР°
+    </button>
+    <button onclick="applyPreset('РќР°РїРёС€Рё РєРѕРґ Jetpack Compose РґР»СЏ РєСЂР°СЃРёРІРѕР№ РєР°СЂС‚РѕС‡РєРё')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800/80 text-xs font-medium text-zinc-300 hover:border-indigo-500/40 hover:text-white transition-all active:scale-95 flex items-center gap-1.5">
+      <i data-lucide="code-2" class="w-3.5 h-3.5 text-indigo-400"></i> РљРѕРґ Compose
+    </button>
+    <button onclick="applyPreset('РЎРѕСЃС‚Р°РІСЊ РїР»Р°РЅ Р°СЂС…РёС‚РµРєС‚СѓСЂС‹ Android-РїСЂРёР»РѕР¶РµРЅРёСЏ СЃ AI')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800/80 text-xs font-medium text-zinc-300 hover:border-indigo-500/40 hover:text-white transition-all active:scale-95 flex items-center gap-1.5">
+      <i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-400"></i> РђСЂС…РёС‚РµРєС‚СѓСЂР°
+    </button>
+  </div>
+
+  <!-- Messages List -->
+  <main id="chatContainer" class="relative z-10 flex-1 overflow-y-auto px-4 py-4 space-y-4 custom-scroll">
+    <!-- Welcome Card -->
+    <div class="p-5 rounded-2xl bg-zinc-900/70 border border-zinc-800/80 backdrop-blur-md shadow-xl">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+        </span>
+        <h3 class="font-semibold text-sm text-white">Google AI Studio РїРѕРґРєР»СЋС‡РµРЅР°</h3>
+      </div>
+      <p class="text-xs text-zinc-300 leading-relaxed">
+        РџСЂРёР»РѕР¶РµРЅРёРµ СѓСЃРїРµС€РЅРѕ СЃРѕР±СЂР°РЅРѕ Рё СЃРёРЅС…СЂРѕРЅРёР·РёСЂРѕРІР°РЅРѕ С‡РµСЂРµР· USB. РРЅС‚РµРіСЂРёСЂРѕРІР°РЅР° СЃРІСЏР·СЊ СЃ РІР°С€РёРј РїСЂРѕС„РёР»РµРј <b>ivanmaspa</b> РЅР° GitHub Рё Google AI Studio.
+      </p>
+      <div class="mt-3 pt-3 border-t border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
+        <span>РЎС‚Р°С‚СѓСЃ СѓСЃС‚СЂРѕР№СЃС‚РІР°: <span class="text-emerald-400 font-medium">РћРЅР»Р°Р№РЅ</span></span>
+        <span>РњРѕРґРµР»СЊ: Gemini 3.8 Flash</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Input Action Bar (Bottom Thumb-Zone) -->
+  <footer class="relative z-20 p-3 bg-zinc-950/90 border-t border-zinc-800/80 backdrop-blur-xl">
+    <form id="chatForm" onsubmit="handleSend(event)" class="flex items-end gap-2 max-w-2xl mx-auto">
+      <div class="flex-1 relative flex items-center bg-zinc-900/90 border border-zinc-800 rounded-2xl focus-within:border-indigo-500/60 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
+        <textarea id="promptInput" rows="1" placeholder="Р—Р°РґР°Р№С‚Рµ РІРѕРїСЂРѕСЃ Google AI Studio..." class="w-full bg-transparent px-4 py-3 text-sm text-white placeholder-zinc-500 resize-none outline-none max-h-32 leading-relaxed" oninput="autoResize(this)"></textarea>
+      </div>
+      <button type="submit" id="btnSend" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-600 text-white flex items-center justify-center shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 active:scale-95 transition-all">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+      </button>
+    </form>
+  </footer>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-sm p-5 shadow-2xl text-left space-y-4">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <h3 class="font-bold text-white text-base">РќР°СЃС‚СЂРѕР№РєРё Google AI Studio</h3>
+        <button onclick="toggleSettings()" class="text-zinc-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1">РљР»СЋС‡ Google AI Studio (API Key)</label>
+          <input type="password" id="inputApiKey" value="YOUR_GEMINI_API_KEY" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 outline-none focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1">Р’С‹Р±РѕСЂ РјРѕРґРµР»Рё</label>
+          <select id="selectModel" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 outline-none focus:border-indigo-500">
+            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Р РµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ)</option>
+            <option value="gemini-3.8-flash">Gemini 3.8 Flash</option>
+            <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+          </select>
+        </div>
+        <p class="text-[11px] text-zinc-500">
+          * Р•СЃР»Рё Р·Р°РїСЂРѕСЃ Р±Р»РѕРєРёСЂСѓРµС‚СЃСЏ РїРѕ РіРµРѕР»РѕРєР°С†РёРё, СѓР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ РЅР° С‚РµР»РµС„РѕРЅРµ РІРєР»СЋС‡С‘РЅ VPN.
+        </p>
+      </div>
+      <div class="pt-2">
+        <button onclick="saveSettings()" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs transition-all">
+          РЎРѕС…СЂР°РЅРёС‚СЊ РЅР°СЃС‚СЂРѕР№РєРё
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    function autoResize(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+    }
+
+    function toggleSettings() {
+      const modal = document.getElementById('settingsModal');
+      modal.classList.toggle('hidden');
+    }
+    document.getElementById('btnSettings').addEventListener('click', toggleSettings);
+
+    function applyPreset(text) {
+      const input = document.getElementById('promptInput');
+      input.value = text;
+      autoResize(input);
+      input.focus();
+    }
+
+    function saveSettings() {
+      const key = document.getElementById('inputApiKey').value;
+      const model = document.getElementById('selectModel').value;
+      localStorage.setItem('GEMINI_API_KEY', key);
+      localStorage.setItem('GEMINI_MODEL', model);
+      toggleSettings();
+    }
+
+    async function handleSend(e) {
+      e.preventDefault();
+      const input = document.getElementById('promptInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendMessage('user', text);
+      input.value = '';
+      input.style.height = 'auto';
+
+      const typingId = appendTypingIndicator();
+
+      const apiKey = localStorage.getItem('GEMINI_API_KEY') || "YOUR_GEMINI_API_KEY";
+      const model = localStorage.getItem('GEMINI_MODEL') || "gemini-2.5-flash";
+
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text }] }]
+          })
+        });
+
+        removeTypingIndicator(typingId);
+
+        if (!response.ok) {
+          const errData = await response.json();
+          appendMessage('ai', `РћС€РёР±РєР° РІС‹Р·РѕРІР° AI Studio: ${errData.error?.message || response.statusText}. РќР°РїРѕРјРёРЅР°РЅРёРµ: РІРєР»СЋС‡РёС‚Рµ VPN РїСЂРё РѕС‚РїСЂР°РІРєРµ Р·Р°РїСЂРѕСЃРѕРІ РёР· Р Р¤.`);
+          return;
+        }
+
+        const data = await response.json();
+        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "РџСѓСЃС‚РѕР№ РѕС‚РІРµС‚ РѕС‚ РјРѕРґРµР»Рё.";
+        appendMessage('ai', reply);
+      } catch (err) {
+        removeTypingIndicator(typingId);
+        appendMessage('ai', `РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РїСЂР°РІРёС‚СЊ Р·Р°РїСЂРѕСЃ (${err.message}). РџСЂРѕРІРµСЂСЊС‚Рµ РїРѕРґРєР»СЋС‡РµРЅРёРµ Рє РёРЅС‚РµСЂРЅРµС‚Сѓ / VPN.`);
+      }
+    }
+
+    function appendMessage(sender, text) {
+      const container = document.getElementById('chatContainer');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = sender === 'user' ? 'flex justify-end' : 'flex justify-start';
+
+      const bubble = document.createElement('div');
+      bubble.className = sender === 'user'
+        ? 'max-w-[85%] p-3.5 rounded-2xl rounded-br-sm bg-indigo-600 text-white text-xs leading-relaxed shadow-md shadow-indigo-600/10'
+        : 'max-w-[85%] p-4 rounded-2xl rounded-bl-sm bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs leading-relaxed whitespace-pre-wrap';
+
+      bubble.textContent = text;
+      msgDiv.appendChild(bubble);
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendTypingIndicator() {
+      const container = document.getElementById('chatContainer');
+      const id = 'typing-' + Date.now();
+      const div = document.createElement('div');
+      div.id = id;
+      div.className = 'flex justify-start';
+      div.innerHTML = `
+        <div class="px-4 py-3 rounded-2xl rounded-bl-sm bg-zinc-900 border border-zinc-800 flex items-center gap-1.5">
+          <div class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" style="animation-delay:0.2s"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" style="animation-delay:0.4s"></div>
+        </div>
+      `;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+      return id;
+    }
+
+    function removeTypingIndicator(id) {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    }
+  </script>
+</body>
+</html>
