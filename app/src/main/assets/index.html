@@ -12,6 +12,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -23,6 +25,11 @@
               500: '#6366f1',
               600: '#4f46e5',
               700: '#4338ca',
+            },
+            telegram: {
+              500: '#229ED9',
+              600: '#1b8bc2',
+              700: '#1575a6',
             }
           }
         }
@@ -74,7 +81,14 @@
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <button id="btnSettings" class="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-all active:scale-95">
+      <!-- Telegram Gateway Action Button -->
+      <button id="btnTelegram" onclick="toggleTelegramModal()" class="px-2.5 py-2 rounded-xl bg-sky-950/60 border border-sky-500/30 text-sky-400 hover:text-white hover:bg-sky-900/60 transition-all active:scale-95 flex items-center gap-1.5 text-xs font-medium">
+        <i data-lucide="send" class="w-4 h-4 text-sky-400"></i>
+        <span class="hidden sm:inline">TG Gateway</span>
+        <span id="tgHeaderBadge" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      </button>
+      <!-- Settings Button -->
+      <button id="btnSettings" onclick="toggleSettings()" class="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-all active:scale-95">
         <i data-lucide="settings" class="w-5 h-5"></i>
       </button>
     </div>
@@ -87,6 +101,9 @@
     </button>
     <button onclick="applyPreset('РќР°РїРёС€Рё РєРѕРґ Jetpack Compose РґР»СЏ РєСЂР°СЃРёРІРѕР№ РєР°СЂС‚РѕС‡РєРё')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800/80 text-xs font-medium text-zinc-300 hover:border-indigo-500/40 hover:text-white transition-all active:scale-95 flex items-center gap-1.5">
       <i data-lucide="code-2" class="w-3.5 h-3.5 text-indigo-400"></i> РљРѕРґ Compose
+    </button>
+    <button onclick="toggleTelegramModal()" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-sky-950/40 border border-sky-500/40 text-xs font-medium text-sky-300 hover:border-sky-400 hover:text-white transition-all active:scale-95 flex items-center gap-1.5">
+      <i data-lucide="send" class="w-3.5 h-3.5 text-sky-400"></i> Telegram Gateway
     </button>
     <button onclick="applyPreset('РЎРѕСЃС‚Р°РІСЊ РїР»Р°РЅ Р°СЂС…РёС‚РµРєС‚СѓСЂС‹ Android-РїСЂРёР»РѕР¶РµРЅРёСЏ СЃ AI')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800/80 text-xs font-medium text-zinc-300 hover:border-indigo-500/40 hover:text-white transition-all active:scale-95 flex items-center gap-1.5">
       <i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-400"></i> РђСЂС…РёС‚РµРєС‚СѓСЂР°
@@ -101,14 +118,17 @@
         <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
           <i data-lucide="check-circle" class="w-4 h-4"></i>
         </span>
-        <h3 class="font-semibold text-sm text-white">Google AI Studio РїРѕРґРєР»СЋС‡РµРЅР°</h3>
+        <h3 class="font-semibold text-sm text-white">Google AI Studio & Telegram Gateway</h3>
       </div>
       <p class="text-xs text-zinc-300 leading-relaxed">
-        РџСЂРёР»РѕР¶РµРЅРёРµ СѓСЃРїРµС€РЅРѕ СЃРѕР±СЂР°РЅРѕ Рё СЃРёРЅС…СЂРѕРЅРёР·РёСЂРѕРІР°РЅРѕ С‡РµСЂРµР· USB. РРЅС‚РµРіСЂРёСЂРѕРІР°РЅР° СЃРІСЏР·СЊ СЃ РІР°С€РёРј РїСЂРѕС„РёР»РµРј <b>ivanmaspa</b> РЅР° GitHub Рё Google AI Studio.
+        РџСЂРёР»РѕР¶РµРЅРёРµ СЃРёРЅС…СЂРѕРЅРёР·РёСЂРѕРІР°РЅРѕ СЃРѕ СЃРјР°СЂС‚С„РѕРЅРѕРј Xiaomi 13 Pro. Р’СЃС‚СЂРѕРµРЅ <b>Telegram Gateway</b> РґР»СЏ РїСЂСЏРјРѕР№ РїРµСЂРµСЃС‹Р»РєРё РѕС‚РІРµС‚РѕРІ РјРѕРґРµР»Рё, Р·РµСЂРєР°Р»РёСЂРѕРІР°РЅРёСЏ РґРёР°Р»РѕРіРѕРІ Рё СѓРїСЂР°РІР»РµРЅРёСЏ С‡РµСЂРµР· Telegram-Р±РѕС‚Р°.
       </p>
       <div class="mt-3 pt-3 border-t border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
-        <span>РЎС‚Р°С‚СѓСЃ СѓСЃС‚СЂРѕР№СЃС‚РІР°: <span class="text-emerald-400 font-medium">РћРЅР»Р°Р№РЅ</span></span>
-        <span>РњРѕРґРµР»СЊ: Gemini 3.8 Flash</span>
+        <span>РЈСЃС‚СЂРѕР№СЃС‚РІРѕ: <span class="text-emerald-400 font-medium">РћРЅР»Р°Р№РЅ</span></span>
+        <span class="flex items-center gap-1.5">
+          <i data-lucide="send" class="w-3 h-3 text-sky-400"></i>
+          <span id="welcomeTgStatus" class="text-sky-400 font-medium">РЁР»СЋР· РіРѕС‚РѕРІ</span>
+        </span>
       </div>
     </div>
   </main>
@@ -125,7 +145,78 @@
     </form>
   </footer>
 
-  <!-- Settings Modal -->
+  <!-- Telegram Gateway Modal -->
+  <div id="telegramModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-md p-5 shadow-2xl text-left space-y-4 max-h-[90vh] overflow-y-auto custom-scroll">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center border border-sky-500/20">
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-white text-base">Telegram Gateway (РЁР»СЋР· РўР“)</h3>
+            <p class="text-[11px] text-zinc-400">РРЅС‚РµРіСЂР°С†РёСЏ СЃ Р±РѕС‚РѕРј Рё РєР°РЅР°Р»РѕРј</p>
+          </div>
+        </div>
+        <button onclick="toggleTelegramModal()" class="text-zinc-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Gateway Status Indicator -->
+      <div id="tgStatusCard" class="p-3.5 rounded-xl bg-zinc-950 border border-zinc-800/80 flex items-center justify-between text-xs">
+        <div class="flex items-center gap-2.5">
+          <span id="tgStatusDot" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+          <span id="tgStatusText" class="font-medium text-zinc-300">РЎС‚Р°С‚СѓСЃ: РўСЂРµР±СѓРµС‚СЃСЏ С‚РѕРєРµРЅ Р±РѕС‚Р°</span>
+        </div>
+        <button onclick="testTelegramConnection()" class="px-2.5 py-1 rounded-lg bg-zinc-800 text-[11px] text-zinc-200 hover:bg-zinc-700 transition-all">
+          РџСЂРѕРІРµСЂРёС‚СЊ
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1">РўРѕРєРµРЅ Telegram-Р±РѕС‚Р° (Bot Token)</label>
+          <input type="text" id="inputTgToken" placeholder="123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 outline-none focus:border-sky-500 font-mono">
+          <p class="text-[10px] text-zinc-500 mt-1">РЎРѕР·РґР°Р№С‚Рµ РёР»Рё СЃРєРѕРїРёСЂСѓР№С‚Рµ С‚РѕРєРµРЅ Сѓ РѕС„РёС†РёР°Р»СЊРЅРѕРіРѕ <b>@BotFather</b></p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1">ID С‡Р°С‚Р° / РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ / РєР°РЅР°Р»Р° (Chat ID)</label>
+          <div class="flex gap-2">
+            <input type="text" id="inputTgChatId" placeholder="Р’Р°С€ С‡РёСЃР»РѕРІРѕР№ ID РёР»Рё @channel_name" class="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 outline-none focus:border-sky-500 font-mono">
+            <button onclick="autoDetectChatId()" title="РћРїСЂРµРґРµР»РёС‚СЊ Chat ID РёР· РїРѕСЃР»РµРґРЅРёС… СЃРѕРѕР±С‰РµРЅРёР№ Р±РѕС‚Сѓ" class="px-3 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-300 transition-all flex items-center gap-1">
+              <i data-lucide="scan" class="w-3.5 h-3.5"></i> РќР°Р№С‚Рё
+            </button>
+          </div>
+          <p class="text-[10px] text-zinc-500 mt-1">РќР°РїРёС€РёС‚Рµ Р»СЋР±РѕРµ СЃРѕРѕР±С‰РµРЅРёРµ Р±РѕС‚Сѓ Рё РЅР°Р¶РјРёС‚Рµ В«РќР°Р№С‚РёВ», С‡С‚РѕР±С‹ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РѕРїСЂРµРґРµР»РёС‚СЊ Chat ID.</p>
+        </div>
+
+        <!-- Auto Mirroring Toggle -->
+        <div class="flex items-center justify-between p-3 rounded-xl bg-zinc-950 border border-zinc-800">
+          <div>
+            <div class="text-xs font-medium text-zinc-200">РђРІС‚Рѕ-Р·РµСЂРєР°Р»РёСЂРѕРІР°РЅРёРµ РІ Telegram</div>
+            <div class="text-[10px] text-zinc-400">РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РґСѓР±Р»РёСЂРѕРІР°С‚СЊ РѕС‚РІРµС‚С‹ Gemini РІ РўР“</div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="checkTgMirror" class="sr-only peer">
+            <div class="w-9 h-5 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-600"></div>
+          </label>
+        </div>
+      </div>
+
+      <div class="pt-2 flex gap-2">
+        <button onclick="sendTelegramTestMessage()" class="flex-1 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-medium text-xs transition-all flex items-center justify-center gap-1.5">
+          <i data-lucide="send" class="w-3.5 h-3.5 text-sky-400"></i> РўРµСЃС‚РѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ
+        </button>
+        <button onclick="saveTelegramSettings()" class="flex-1 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-medium text-xs transition-all shadow-lg shadow-sky-600/20">
+          РЎРѕС…СЂР°РЅРёС‚СЊ С€Р»СЋР·
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal (Google AI Studio) -->
   <div id="settingsModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-sm p-5 shadow-2xl text-left space-y-4">
       <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
@@ -142,13 +233,13 @@
         <div>
           <label class="block text-xs font-medium text-zinc-400 mb-1">Р’С‹Р±РѕСЂ РјРѕРґРµР»Рё</label>
           <select id="selectModel" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 outline-none focus:border-indigo-500">
-            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Р РµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ)</option>
-            <option value="gemini-3.8-flash">Gemini 3.8 Flash</option>
+            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Р‘С‹СЃС‚СЂР°СЏ)</option>
+            <option value="gemini-3.8-flash" selected>Gemini 3.8 Flash</option>
             <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
           </select>
         </div>
         <p class="text-[11px] text-zinc-500">
-          * Р•СЃР»Рё Р·Р°РїСЂРѕСЃ Р±Р»РѕРєРёСЂСѓРµС‚СЃСЏ РїРѕ РіРµРѕР»РѕРєР°С†РёРё, СѓР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ РЅР° С‚РµР»РµС„РѕРЅРµ РІРєР»СЋС‡С‘РЅ VPN.
+          * РќР°РїРѕРјРёРЅР°РЅРёРµ: РїСЂРё Р·Р°РїСЂРѕСЃР°С… РёР· Р Р¤ РґРµСЂР¶РёС‚Рµ VPN РІРєР»СЋС‡С‘РЅРЅС‹Рј.
         </p>
       </div>
       <div class="pt-2">
@@ -159,8 +250,47 @@
     </div>
   </div>
 
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none space-y-2"></div>
+
   <script>
     lucide.createIcons();
+
+    // Check if running inside Telegram Mini App
+    if (window.Telegram && window.Telegram.WebApp) {
+      try {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+        const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
+        if (tgUser && tgUser.id) {
+          localStorage.setItem('TG_CHAT_ID', tgUser.id);
+          const inputChatId = document.getElementById('inputTgChatId');
+          if (inputChatId && !inputChatId.value) inputChatId.value = tgUser.id;
+        }
+      } catch (e) {
+        console.log("Telegram WebApp init:", e);
+      }
+    }
+
+    // Load initial settings
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedKey = localStorage.getItem('GEMINI_API_KEY');
+      if (savedKey) document.getElementById('inputApiKey').value = savedKey;
+
+      const savedModel = localStorage.getItem('GEMINI_MODEL');
+      if (savedModel) document.getElementById('selectModel').value = savedModel;
+
+      const savedTgToken = localStorage.getItem('TG_BOT_TOKEN');
+      if (savedTgToken) document.getElementById('inputTgToken').value = savedTgToken;
+
+      const savedTgChatId = localStorage.getItem('TG_CHAT_ID');
+      if (savedTgChatId) document.getElementById('inputTgChatId').value = savedTgChatId;
+
+      const savedTgMirror = localStorage.getItem('TG_MIRROR') === 'true';
+      document.getElementById('checkTgMirror').checked = savedTgMirror;
+
+      updateTgStatusDisplay();
+    });
 
     function autoResize(textarea) {
       textarea.style.height = 'auto';
@@ -171,7 +301,32 @@
       const modal = document.getElementById('settingsModal');
       modal.classList.toggle('hidden');
     }
-    document.getElementById('btnSettings').addEventListener('click', toggleSettings);
+
+    function toggleTelegramModal() {
+      const modal = document.getElementById('telegramModal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        updateTgStatusDisplay();
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const bgColor = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-zinc-800 border border-zinc-700';
+      toast.className = `${bgColor} text-white text-xs px-4 py-2.5 rounded-full shadow-lg backdrop-blur-md transition-all duration-300 opacity-0 transform translate-y-2 flex items-center gap-2 pointer-events-auto`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-0', 'translate-y-2');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
 
     function applyPreset(text) {
       const input = document.getElementById('promptInput');
@@ -186,6 +341,152 @@
       localStorage.setItem('GEMINI_API_KEY', key);
       localStorage.setItem('GEMINI_MODEL', model);
       toggleSettings();
+      showToast('РќР°СЃС‚СЂРѕР№РєРё Gemini СЃРѕС…СЂР°РЅРµРЅС‹', 'success');
+    }
+
+    function saveTelegramSettings() {
+      const token = document.getElementById('inputTgToken').value.trim();
+      const chatId = document.getElementById('inputTgChatId').value.trim();
+      const mirror = document.getElementById('checkTgMirror').checked;
+
+      localStorage.setItem('TG_BOT_TOKEN', token);
+      localStorage.setItem('TG_CHAT_ID', chatId);
+      localStorage.setItem('TG_MIRROR', mirror);
+
+      toggleTelegramModal();
+      updateTgStatusDisplay();
+      showToast('РќР°СЃС‚СЂРѕР№РєРё Telegram Gateway СЃРѕС…СЂР°РЅРµРЅС‹', 'success');
+    }
+
+    async function updateTgStatusDisplay() {
+      const token = localStorage.getItem('TG_BOT_TOKEN') || document.getElementById('inputTgToken').value.trim();
+      const dot = document.getElementById('tgStatusDot');
+      const text = document.getElementById('tgStatusText');
+      const headerBadge = document.getElementById('tgHeaderBadge');
+
+      if (!token) {
+        if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-zinc-600';
+        if (text) text.textContent = 'РЁР»СЋР· РЅРµ РЅР°СЃС‚СЂРѕРµРЅ (РІРІРµРґРёС‚Рµ С‚РѕРєРµРЅ)';
+        if (headerBadge) headerBadge.className = 'w-2 h-2 rounded-full bg-zinc-600';
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/getMe`);
+        const data = await res.json();
+        if (data.ok) {
+          if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400';
+          if (text) text.textContent = `РЁР»СЋР· Р°РєС‚РёРІРµРЅ: @${data.result.username}`;
+          if (headerBadge) headerBadge.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+        } else {
+          if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-rose-500';
+          if (text) text.textContent = 'РћС€РёР±РєР° С‚РѕРєРµРЅР° Telegram';
+          if (headerBadge) headerBadge.className = 'w-2 h-2 rounded-full bg-rose-500';
+        }
+      } catch (err) {
+        if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400';
+        if (text) text.textContent = 'РЁР»СЋР·: РїСЂРѕРІРµСЂРєР° СЃРІСЏР·Рё...';
+      }
+    }
+
+    async function testTelegramConnection() {
+      const token = document.getElementById('inputTgToken').value.trim();
+      if (!token) {
+        showToast('Р’РІРµРґРёС‚Рµ С‚РѕРєРµРЅ Р±РѕС‚Р°', 'error');
+        return;
+      }
+      showToast('РџСЂРѕРІРµСЂРєР° СЃРІСЏР·Рё СЃ Telegram API...');
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/getMe`);
+        const data = await res.json();
+        if (data.ok) {
+          showToast(`РџРѕРґРєР»СЋС‡РµРЅРѕ: @${data.result.username} (${data.result.first_name})`, 'success');
+          updateTgStatusDisplay();
+        } else {
+          showToast(`РћС€РёР±РєР° API: ${data.description}`, 'error');
+        }
+      } catch (e) {
+        showToast(`РЎР±РѕР№ Р·Р°РїСЂРѕСЃР°: ${e.message}`, 'error');
+      }
+    }
+
+    async function autoDetectChatId() {
+      const token = document.getElementById('inputTgToken').value.trim();
+      if (!token) {
+        showToast('РЎРЅР°С‡Р°Р»Р° РІРІРµРґРёС‚Рµ С‚РѕРєРµРЅ Р±РѕС‚Р°', 'error');
+        return;
+      }
+      showToast('РџРѕРёСЃРє РЅРµРґР°РІРЅРёС… СЃРѕРѕР±С‰РµРЅРёР№ Р±РѕС‚Сѓ...');
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/getUpdates?limit=10`);
+        const data = await res.json();
+        if (data.ok && data.result.length > 0) {
+          const lastMsg = data.result[data.result.length - 1].message;
+          if (lastMsg && lastMsg.chat) {
+            const detectedId = lastMsg.chat.id;
+            document.getElementById('inputTgChatId').value = detectedId;
+            showToast(`РќР°Р№РґРµРЅ Chat ID: ${detectedId}`, 'success');
+            return;
+          }
+        }
+        showToast('РЎРѕРѕР±С‰РµРЅРёР№ РЅРµ РЅР°Р№РґРµРЅРѕ. РќР°РїРёС€РёС‚Рµ Р±РѕС‚Сѓ Р»СЋР±РѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РІ Telegram Рё РїРѕРІС‚РѕСЂРёС‚Рµ!', 'error');
+      } catch (e) {
+        showToast(`РћС€РёР±РєР°: ${e.message}`, 'error');
+      }
+    }
+
+    async function sendTelegramMessage(text) {
+      const token = localStorage.getItem('TG_BOT_TOKEN') || document.getElementById('inputTgToken').value.trim();
+      const chatId = localStorage.getItem('TG_CHAT_ID') || document.getElementById('inputTgChatId').value.trim();
+
+      if (!token || !chatId) {
+        showToast('РќР°СЃС‚СЂРѕР№С‚Рµ С‚РѕРєРµРЅ Рё Chat ID РІ TG Gateway', 'error');
+        toggleTelegramModal();
+        return false;
+      }
+
+      try {
+        const url = `https://api.telegram.org/bot${token}/sendMessage`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: text,
+            parse_mode: 'HTML'
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast('РћС‚РїСЂР°РІР»РµРЅРѕ РІ Telegram! вњ€', 'success');
+          return true;
+        } else {
+          // If HTML parsing failed, fallback to plain text
+          const fallbackRes = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: text
+            })
+          });
+          const fallbackData = await fallbackRes.json();
+          if (fallbackData.ok) {
+            showToast('РћС‚РїСЂР°РІР»РµРЅРѕ РІ Telegram! вњ€', 'success');
+            return true;
+          } else {
+            showToast(`РћС€РёР±РєР° РўР“: ${fallbackData.description}`, 'error');
+            return false;
+          }
+        }
+      } catch (e) {
+        showToast(`РћС€РёР±РєР° РѕС‚РїСЂР°РІРєРё РІ РўР“: ${e.message}`, 'error');
+        return false;
+      }
+    }
+
+    async function sendTelegramTestMessage() {
+      const ok = await sendTelegramMessage("вљЎ <b>Gemini Studio AI вЂ” Telegram Gateway</b>\n\nРЁР»СЋР· СѓСЃРїРµС€РЅРѕ РїРѕРґРєР»СЋС‡РµРЅ Рё РіРѕС‚РѕРІ Рє С‚СЂР°РЅСЃР»СЏС†РёРё РґРёР°Р»РѕРіРѕРІ!");
     }
 
     async function handleSend(e) {
@@ -201,7 +502,7 @@
       const typingId = appendTypingIndicator();
 
       const apiKey = localStorage.getItem('GEMINI_API_KEY') || "YOUR_GEMINI_API_KEY";
-      const model = localStorage.getItem('GEMINI_MODEL') || "gemini-2.5-flash";
+      const model = localStorage.getItem('GEMINI_MODEL') || "gemini-3.8-flash";
 
       try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
@@ -224,6 +525,11 @@
         const data = await response.json();
         const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "РџСѓСЃС‚РѕР№ РѕС‚РІРµС‚ РѕС‚ РјРѕРґРµР»Рё.";
         appendMessage('ai', reply);
+
+        // Auto mirror to Telegram if enabled
+        if (localStorage.getItem('TG_MIRROR') === 'true') {
+          sendTelegramMessage(`рџ¤– <b>Gemini AI Studio:</b>\n\n${reply}`);
+        }
       } catch (err) {
         removeTypingIndicator(typingId);
         appendMessage('ai', `РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РїСЂР°РІРёС‚СЊ Р·Р°РїСЂРѕСЃ (${err.message}). РџСЂРѕРІРµСЂСЊС‚Рµ РїРѕРґРєР»СЋС‡РµРЅРёРµ Рє РёРЅС‚РµСЂРЅРµС‚Сѓ / VPN.`);
@@ -235,15 +541,43 @@
       const msgDiv = document.createElement('div');
       msgDiv.className = sender === 'user' ? 'flex justify-end' : 'flex justify-start';
 
+      const bubbleWrapper = document.createElement('div');
+      bubbleWrapper.className = 'max-w-[85%] space-y-1.5';
+
       const bubble = document.createElement('div');
       bubble.className = sender === 'user'
-        ? 'max-w-[85%] p-3.5 rounded-2xl rounded-br-sm bg-indigo-600 text-white text-xs leading-relaxed shadow-md shadow-indigo-600/10'
-        : 'max-w-[85%] p-4 rounded-2xl rounded-bl-sm bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs leading-relaxed whitespace-pre-wrap';
-
+        ? 'p-3.5 rounded-2xl rounded-br-sm bg-indigo-600 text-white text-xs leading-relaxed shadow-md shadow-indigo-600/10'
+        : 'p-4 rounded-2xl rounded-bl-sm bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs leading-relaxed whitespace-pre-wrap';
       bubble.textContent = text;
-      msgDiv.appendChild(bubble);
+      bubbleWrapper.appendChild(bubble);
+
+      // Add Action Buttons toolbar for AI responses
+      if (sender === 'ai') {
+        const toolbar = document.createElement('div');
+        toolbar.className = 'flex items-center gap-2 pt-1 pl-1';
+
+        const btnTg = document.createElement('button');
+        btnTg.className = 'px-2.5 py-1 rounded-lg bg-sky-950/50 border border-sky-500/20 text-sky-400 hover:text-white hover:bg-sky-900/40 text-[11px] font-medium transition-all flex items-center gap-1 active:scale-95';
+        btnTg.innerHTML = '<i data-lucide="send" class="w-3 h-3"></i> Р’ Telegram';
+        btnTg.onclick = () => sendTelegramMessage(text);
+        toolbar.appendChild(btnTg);
+
+        const btnCopy = document.createElement('button');
+        btnCopy.className = 'px-2 py-1 rounded-lg bg-zinc-800/60 text-zinc-400 hover:text-zinc-200 text-[11px] transition-all flex items-center gap-1 active:scale-95';
+        btnCopy.innerHTML = '<i data-lucide="copy" class="w-3 h-3"></i> РљРѕРїРёСЂРѕРІР°С‚СЊ';
+        btnCopy.onclick = () => {
+          navigator.clipboard.writeText(text);
+          showToast('РЎРєРѕРїРёСЂРѕРІР°РЅРѕ РІ Р±СѓС„РµСЂ', 'success');
+        };
+        toolbar.appendChild(btnCopy);
+
+        bubbleWrapper.appendChild(toolbar);
+      }
+
+      msgDiv.appendChild(bubbleWrapper);
       container.appendChild(msgDiv);
       container.scrollTop = container.scrollHeight;
+      lucide.createIcons();
     }
 
     function appendTypingIndicator() {
