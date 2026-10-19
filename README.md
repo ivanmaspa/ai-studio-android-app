@@ -1,2 +1,3 @@
-# ai-studio-android-app
-AI Studio Mobile Application for Android &amp; Web
+# Gemini Studio AI - Mobile App
+
+Android & Mobile Web Application powered by Google AI Studio and Gemini 3.8 Flash.
